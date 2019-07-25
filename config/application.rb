@@ -16,6 +16,17 @@ module TodoServer
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
 
+    # CORS対策で必要
+    config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins ENV.fetch('CORS_ALLOWED_ORIGINS', 'http://localhost:3000')
+        resource '/api/*',
+          headers: :any,
+          methods: [:get, :post, :put, :patch, :delete, :options, :head],
+          credentials: true
+      end
+    end
+
     # 不要なview/test関連ファイルのgenrarateを防ぐ
     config.generators do |g|
       g.assets false
